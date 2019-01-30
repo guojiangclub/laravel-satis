@@ -1,0 +1,40 @@
+{
+  "name": "ibrand/laravel-satis",
+  "type": "library",
+  "description": "ibrand laravel-satis",
+  "keywords": [
+    "iBrand",
+    "laravel-satis",
+    "satis"
+  ],
+  "require": {
+    "php": ">=7.0",
+    "composer/satis": "^1.0"
+  },
+  "require-dev": {
+    "mockery/mockery": "~1.0",
+    "phpunit/phpunit": "~7.0",
+    "orchestra/testbench": "~3.5",
+    "orchestra/database": "~3.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "iBrand\\Satis\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "iBrand\\Satis\\Test\\": "tests"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "iBrand\\Satis\\Providers\\SatisServiceProvider",
+        "iBrand\\Satis\\Providers\\RouteServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
