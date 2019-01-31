@@ -18,8 +18,8 @@ class SatisController extends Controller
 {
     public function index()
     {
-        if (file_exists(public_path('satis') . '/index.html')) {
-            $content = file_get_contents(public_path('satis') . '/index.html');
+        if (file_exists(public_path('satis').'/index.html')) {
+            $content = file_get_contents(public_path('satis').'/index.html');
 
             echo $content;
         }
@@ -27,8 +27,12 @@ class SatisController extends Controller
 
     public function satis()
     {
+        $all=request()->all();
 
-        $all = request()->all();
+        if(config('ibrand.satis.log')){
+
+            \Log::info($all);
+        }
 
         if (isset($all['object_kind']) and isset($all['ref']) and 'tag_push' == $all['object_kind']) {
             $git = $all['repository']['url'];
@@ -39,8 +43,6 @@ class SatisController extends Controller
 
             return 'success';
         }
-
-        \Log::info($all);
 
         return 'webhook info error';
     }

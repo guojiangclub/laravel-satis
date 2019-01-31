@@ -12,6 +12,9 @@
 namespace iBrand\Satis\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\ProcessUtils;
+use Symfony\Component\Process\PhpExecutableFinder;
+
 
 class InstallCommand extends Command
 {
@@ -42,19 +45,32 @@ class InstallCommand extends Command
             file_put_contents($destinationPath . '/satis.json', $contents);
         }
 
-        $laravl_satis = 'vendor/ibrand/laravel-satis';
+        $laravel_satis = 'vendor/ibrand/laravel-satis';
 
-        $shell = "php  $laravl_satis/satis  build $laravl_satis/$git/$tag/satis.json  satis";
+        $php = ProcessUtils::escapeArgument((new PhpExecutableFinder())->find(false));
+
+        $satis = app()->basePath() . '/vendor/bin/satis';
+
+        if ($php) {
+
+            $php = trim($php, "'");
+        }
+
+        $shell = "$php $satis build $laravel_satis/$git/$tag/satis.json  satis 2>&1";
 
         exec($shell, $result, $status);
 
-        if ($status) {
-            \Log::info('error');
-
-            return false;
+        if (config('ibrand.satis.log')) {
+            if ($status) {
+                \Log::info("shell命令{$shell}执行失败");
+                \Log::info($result);
+            } else {
+                \Log::info("shell命令{$shell}执行成功");
+                \Log::info($result);
+            }
         }
 
-        return true;
+
     }
 
     protected function setSatisJson($git, $server)
@@ -70,7 +86,7 @@ class InstallCommand extends Command
         $releases = last(explode('v', explode('.', $server)[0]));
 
         $satis = [
-            'name' => 'iBrand Private Composer',
+            'name' => 'packages/satis',
             'homepage' => route('satis'),
             'repositories' => [[
                 'type' => 'vcs',

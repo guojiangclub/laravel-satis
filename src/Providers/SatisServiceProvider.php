@@ -23,11 +23,10 @@ class SatisServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(public_path('satis'), 'satis');
 
-        if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__ . '/../../bin/satis' => public_path('vendor/ibrand/laravel-satis/satis'),
-            ]);
-        }
+        $this->publishes([
+            __DIR__.'/../../config/satis.php' => config_path('ibrand/satis.php'),
+        ]);
+
     }
 
     /**
