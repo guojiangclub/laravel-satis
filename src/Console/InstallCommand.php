@@ -67,7 +67,7 @@ class InstallCommand extends Command
             $php = trim($php, "'");
         }
 
-        $shell = "$php $satis build $laravel_satis/$git/$tag/satis.json satis $name 2>&1";dd($shell);
+        $shell = "$php $satis build $laravel_satis/$git/$tag/satis.json satis $name 2>&1";
 
         exec($shell, $result, $status);
 
