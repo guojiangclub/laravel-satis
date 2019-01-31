@@ -18,8 +18,8 @@ class SatisController extends Controller
 {
     public function index()
     {
-        if (file_exists(public_path('satis').'/index.html')) {
-            $content = file_get_contents(public_path('satis').'/index.html');
+        if (file_exists(public_path('satis') . '/index.html')) {
+            $content = file_get_contents(public_path('satis') . '/index.html');
 
             echo $content;
         }
@@ -27,22 +27,25 @@ class SatisController extends Controller
 
     public function satis()
     {
-        $all=request()->all();
+        $all = request()->all();
 
-        if(config('ibrand.satis.log')){
+        if (config('ibrand.satis.log')) {
 
             \Log::info($all);
         }
 
-        if (isset($all['object_kind']) and isset($all['ref']) and 'tag_push' == $all['object_kind']) {
-            $git = $all['repository']['url'];
+        if (isset($all['repository']['git_ssh_url']) AND isset($all['ref'])) {
+
+            $git = $all['repository']['git_ssh_url'];
 
             $tag = last(explode('/', $all['ref']));
 
             Artisan::call('ibrand-statis:webhook', ['git' => $git, 'tag' => $tag]);
 
             return 'success';
+
         }
+
 
         return 'webhook info error';
     }

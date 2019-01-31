@@ -39,9 +39,20 @@ class InstallCommand extends Command
             mkdir($destinationPath, 0777, true);
         }
 
-        $contents = $this->setSatisJson($git, $tag);
+        $arr = explode('/', last(explode(':', $git)));
+
+        $tag_arr[] = $arr[0];
+
+        $tag_arr[] = explode('.', last($arr))[0];
+
+        $name = $tag_arr[0] . '/' . $tag_arr[1];
+
+        $releases = last(explode('v', explode('.', $tag)[0]));
 
         if (!file_exists($destinationPath . '/satis.json')) {
+
+            $contents = $this->setSatisJson($name,$git,$releases);
+
             file_put_contents($destinationPath . '/satis.json', $contents);
         }
 
@@ -56,7 +67,7 @@ class InstallCommand extends Command
             $php = trim($php, "'");
         }
 
-        $shell = "$php $satis build $laravel_satis/$git/$tag/satis.json  satis 2>&1";
+        $shell = "$php $satis build $laravel_satis/$git/$tag/satis.json satis $name 2>&1";dd($shell);
 
         exec($shell, $result, $status);
 
@@ -73,20 +84,11 @@ class InstallCommand extends Command
 
     }
 
-    protected function setSatisJson($git, $server)
+    protected function setSatisJson($name,$git,$releases)
     {
-        $arr = explode('/', last(explode(':', $git)));
-
-        $tag[] = $arr[0];
-
-        $tag[] = explode('.', last($arr))[0];
-
-        $name = $tag[0] . '/' . $tag[1];
-
-        $releases = last(explode('v', explode('.', $server)[0]));
 
         $satis = [
-            'name' => 'packages/satis',
+            'name' => config('ibrand.satis.name'),
             'homepage' => route('satis'),
             'repositories' => [[
                 'type' => 'vcs',
