@@ -60,7 +60,7 @@ class InstallCommand extends Command
 
         $php = ProcessUtils::escapeArgument((new PhpExecutableFinder())->find(false));
 
-        $satis = app()->basePath() . '/vendor/bin/satis';
+        $satis = app()->basePath() . '/vendor/composer/satis/bin/satis';
 
         if ($php) {
 
