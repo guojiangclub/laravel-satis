@@ -11,6 +11,6 @@
 
 return [
     'name' => 'ibrand/packages',
-    'log' => true
-
+    'log' => true,
+    'satis_name'=>'ibrand'
 ];

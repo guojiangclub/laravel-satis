@@ -18,6 +18,7 @@ class SatisController extends Controller
 {
     public function index()
     {
+
         if (file_exists(public_path('satis') . '/index.html')) {
             $content = file_get_contents(public_path('satis') . '/index.html');
 
@@ -34,6 +35,17 @@ class SatisController extends Controller
             \Log::info($all);
         }
 
+
+        if(isset($all['payload'])){
+
+            $data=json_decode($all['payload']);
+
+            $all['repository']['git_ssh_url']=$data->repository->ssh_url;
+
+            $all['ref']='refs/tags/'.$data->ref;
+
+        }
+        
         if (isset($all['repository']['git_ssh_url']) AND isset($all['ref'])) {
 
             $git = $all['repository']['git_ssh_url'];

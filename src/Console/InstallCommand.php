@@ -45,7 +45,9 @@ class InstallCommand extends Command
 
         $tag_arr[] = explode('.', last($arr))[0];
 
-        $name = $tag_arr[0] . '/' . $tag_arr[1];
+        $satis_name=config('ibrand.satis.satis_name',$tag_arr[0]);
+
+        $name = $satis_name . '/' . $tag_arr[1];
 
         $releases = last(explode('v', explode('.', $tag)[0]));
 
